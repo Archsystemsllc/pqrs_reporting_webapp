@@ -50,6 +50,14 @@
 				<input type="reset" value="Reset">
 			</div>
 			<p>
+				Document Statewise :
+				<form:input type="file" path="statewise" size="40"/>
+			</p>
+			<div>
+				<input type="submit" value="Upload">
+				<input type="reset" value="Reset">
+			</div>
+			<p>
 				Document Specialty :
 				<form:input type="file" path="specialty" size="40"/>
 			</p>

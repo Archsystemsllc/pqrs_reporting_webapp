@@ -29,10 +29,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.archsystemsinc.pqrs.model.DocumentUpload;
 import com.archsystemsinc.pqrs.model.ProviderHypothesis;
 import com.archsystemsinc.pqrs.model.ReportingOptionLookup;
+import com.archsystemsinc.pqrs.model.Speciality;
+import com.archsystemsinc.pqrs.model.StatewiseStatistic;
 import com.archsystemsinc.pqrs.model.YearLookup;
 import com.archsystemsinc.pqrs.service.ParameterLookUpService;
 import com.archsystemsinc.pqrs.service.ProviderHypothesisService;
 import com.archsystemsinc.pqrs.service.ReportingOptionLookUpService;
+import com.archsystemsinc.pqrs.service.SpecialityService;
+import com.archsystemsinc.pqrs.service.StatewiseStatisticService;
 import com.archsystemsinc.pqrs.service.YearLookUpService;
 
 /**
@@ -57,6 +61,11 @@ public class DocumentUploadController {
 	@Autowired
 	private YearLookUpService yearLookUpService;
 	
+	@Autowired
+	private SpecialityService specialtyService;
+	
+	@Autowired
+	private StatewiseStatisticService statewiseStatisticService;
 	
 	@RequestMapping(value = "/admin/documentupload", method = RequestMethod.GET)
 	public String documentUploadGet(final Model model, HttpSession session) {		
@@ -72,15 +81,33 @@ public class DocumentUploadController {
 			final BindingResult result, final HttpServletRequest request) throws InvalidFormatException {		
 		
 		try {
-			documentUploadProvider(documentFileUpload);
+			stateWiseStatistics(documentFileUpload);
+			//			switch (documentFileUpload.getDocumentTypeId().intValue()) 
+			//			{			
+			//				case 1:
+			//					providerDocUpload(documentFileUpload);
+			//				   break;
+			//				case 2:
+			//					stateWiseStatistics(documentFileUpload);
+			//					break;
+			//				case 3:	
+			//					specialtyDocUpload(documentFileUpload);
+			//					break;
+			//				default:
+			//					specialtyDocUpload(documentFileUpload);
+			//					break;
+			//			}
+			
 			model.addAttribute("documentuploadsuccess","success.save.questions");
 		}catch (Exception e) {
-			System.out.println("Exception in Documents Upload page: " + e.getMessage());			
+			System.out.println("Exception in Documents Upload page: " + e.getMessage());	
+			e.printStackTrace();
 			model.addAttribute("documentuploaderror","error.save.document");
 		}		
 		
 		return "uploadform";
 	}
+
 	
    
 	public void documentUploadProvider(
@@ -239,9 +266,261 @@ public class DocumentUploadController {
 					}
  
 				}
+				
+				
+				
+				
 
 			}			
 
+	}
+	
+	
+	public void stateWiseStatistics(
+			final DocumentUpload documentFileUpload) throws InvalidFormatException, EncryptedDocumentException, IOException {
+		int totalNumberOfRows = 0;
+		int totalProRowsCreatedOrUpdated = 0;
+		ArrayList<Object> returnObjects = null;
+		
+		
+			
+			if (documentFileUpload.getStatewise() != null) {
+				
+				Workbook stateStatFileWorkbook = WorkbookFactory.create(documentFileUpload.getStatewise().getInputStream());
+				Sheet stateStatFileSheet = stateStatFileWorkbook.getSheetAt(0);
+				Iterator<Row> stateStatFileRowIterator = stateStatFileSheet.rowIterator();
+                int stateStatFileRowCount = stateStatFileSheet.getPhysicalNumberOfRows();
+				totalNumberOfRows = stateStatFileRowCount - 1;
+				String stringResult = "";				 
+				
+				//long yearId =  2;
+
+				while (stateStatFileRowIterator.hasNext()) 
+				{
+					Row stateStatFileRow = (Row) stateStatFileRowIterator.next();
+					
+					returnObjects = new ArrayList<Object>();
+					
+					if (stateStatFileRow.getRowNum() > 0 && stateStatFileRow.getRowNum() <= stateStatFileRowCount)
+					{
+						System.out.println("ROW - " + stateStatFileRow.getRowNum());
+						Iterator<Cell> iterator = stateStatFileRow.cellIterator();
+						StatewiseStatistic statewiseStatistic = new StatewiseStatistic();
+						
+						
+						while (iterator.hasNext()) 
+						{
+							Cell hssfCell = (Cell) iterator.next();
+							int cellIndex = hssfCell.getColumnIndex();
+							
+							switch (cellIndex) 
+							{
+							
+							case 0:
+								switch (hssfCell.getCellType())
+								{
+								
+				                case Cell.CELL_TYPE_STRING:					                	
+				                    stringResult=hssfCell.getStringCellValue();
+				                    statewiseStatistic.setState(stringResult); 
+				                    System.out.println("State: " + stringResult);
+				                  
+				                    break;
+								
+								}
+								break;								
+							case 1:
+								switch (hssfCell.getCellType())
+								{
+								
+				                case Cell.CELL_TYPE_STRING:
+				                	stringResult=hssfCell.getStringCellValue();
+				                	statewiseStatistic.setYearLookup(yearLookUpService.findByYearName(stringResult));				                   
+				                    break;	
+								
+								}
+								break;
+	
+							case 2:
+								switch (hssfCell.getCellType()) 
+								{
+								
+								case Cell.CELL_TYPE_NUMERIC:
+				                    statewiseStatistic.setEpOrGpro((int)hssfCell.getNumericCellValue());
+				                    break;
+								
+								}
+								break;
+							case 3:
+								switch (hssfCell.getCellType())
+								{
+								
+								case Cell.CELL_TYPE_NUMERIC:
+				                    statewiseStatistic.setRuralUrban((int)hssfCell.getNumericCellValue());
+				                    break;
+								
+								}
+								break;
+							case 4:
+								switch (hssfCell.getCellType())
+								{
+								
+								case Cell.CELL_TYPE_NUMERIC:
+				                    statewiseStatistic.setYesOrNooption((int)hssfCell.getNumericCellValue());
+				                    break;
+								
+								}
+								break;
+							case 5:
+								switch (hssfCell.getCellType())
+								{
+								
+								case Cell.CELL_TYPE_STRING:
+									stringResult=hssfCell.getStringCellValue();									
+				                    statewiseStatistic.setReportingOptionLookup(reportingOptionLookUpService.findByReportingOptionName(stringResult));
+				                    break;								
+								}
+								break;
+							case 6:
+								switch (hssfCell.getCellType())
+								{
+								
+								case Cell.CELL_TYPE_NUMERIC:
+									 System.out.println("start");
+				                    statewiseStatistic.setCount(BigInteger.valueOf((int)hssfCell.getNumericCellValue()));
+				                    System.out.println("Count" + hssfCell.getNumericCellValue());
+				                    statewiseStatisticService.create(statewiseStatistic);
+				                    System.out.println("stop");
+				                    break;								
+								}
+								break;
+							default:
+								break;
+							
+							}
+
+
+						}
+						
+						
+					}
+ 
+				}
+
+			}			
+
+	}
+	
+	
+	public void specialtyDocUpload(
+			final DocumentUpload documentFileUpload) throws InvalidFormatException, EncryptedDocumentException, IOException {
+		int totalNumberOfRows = 0;
+		int totalProRowsCreatedOrUpdated = 0;
+		ArrayList<Object> returnObjects = null;
+		
+		
+			
+			if (documentFileUpload.getSpecialty() != null) {
+				
+				Workbook specialtyFileWorkbook = WorkbookFactory.create(documentFileUpload.getSpecialty().getInputStream());
+				Sheet specialtyFileSheet = specialtyFileWorkbook.getSheetAt(0);
+				Iterator<Row> specialtyFileRowIterator = specialtyFileSheet.rowIterator();
+                int specialtyFileRowCount = specialtyFileSheet.getPhysicalNumberOfRows();
+				totalNumberOfRows = specialtyFileRowCount - 1;
+				String stringResult = "";				 
+				
+				//long yearId =  2;
+
+				while (specialtyFileRowIterator.hasNext()) 
+				{
+					Row specialtyFileRow = (Row) specialtyFileRowIterator.next();
+					
+					returnObjects = new ArrayList<Object>();
+					
+					if (specialtyFileRow.getRowNum() > 0 && specialtyFileRow.getRowNum() <= specialtyFileRowCount)
+					{
+						System.out.println("ROW - " + specialtyFileRow.getRowNum());
+						Iterator<Cell> iterator = specialtyFileRow.cellIterator();
+						Speciality specialty = new Speciality();
+						
+						
+						while (iterator.hasNext()) 
+						{
+							Cell hssfCell = (Cell) iterator.next();
+							int cellIndex = hssfCell.getColumnIndex();
+							
+							switch (cellIndex) 
+							{
+							
+							case 1:
+								switch (hssfCell.getCellType())
+								{
+								
+				                case Cell.CELL_TYPE_STRING:					                	
+				                    stringResult=hssfCell.getStringCellValue();
+				                    specialty.setPrimarySpeciality(stringResult);
+				                    System.out.println("Primary Spec: " + stringResult);
+				                  
+				                    break;
+								
+								}
+								break;								
+							case 2:
+								switch (hssfCell.getCellType())
+								{
+								
+				                case Cell.CELL_TYPE_NUMERIC:
+				                	specialty.setCount(BigInteger.valueOf((int)hssfCell.getNumericCellValue()));
+				                    break;	
+								
+								}
+								break;
+	
+							case 3:
+								switch (hssfCell.getCellType()) 
+								{
+								
+								case Cell.CELL_TYPE_NUMERIC:
+									specialty.setPercent(hssfCell.getNumericCellValue());
+				                    break;
+								
+								}
+								break;
+							case 4:
+								switch (hssfCell.getCellType())
+								{
+								
+								case Cell.CELL_TYPE_STRING:
+									stringResult=hssfCell.getStringCellValue();										
+									specialty.setYearLookup(yearLookUpService.findByYearName(stringResult));									
+				                    break;
+								
+								}
+								break;							
+							case 5:
+								switch (hssfCell.getCellType())
+								{								
+								case Cell.CELL_TYPE_STRING:									
+									stringResult=hssfCell.getStringCellValue();									
+									specialty.setReportingOptionLookup(reportingOptionLookUpService.findByReportingOptionName(stringResult));
+									specialtyService.create(specialty);
+				                    break;								
+								}
+								break;
+							default:
+								break;
+							
+							}
+
+
+						}
+						
+						
+					}
+ 
+				}
+
+			}			
 	}
 
 }

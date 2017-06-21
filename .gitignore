@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 /.gradle/
 /bin/
 /build/
+=======
+>>>>>>> refs/remotes/origin/master
 # Compiled class file
 *.class
 

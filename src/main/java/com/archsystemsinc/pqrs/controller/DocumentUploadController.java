@@ -82,21 +82,7 @@ public class DocumentUploadController {
 		
 		try {
 			stateWiseStatistics(documentFileUpload);
-			//			switch (documentFileUpload.getDocumentTypeId().intValue()) 
-			//			{			
-			//				case 1:
-			//					providerDocUpload(documentFileUpload);
-			//				   break;
-			//				case 2:
-			//					stateWiseStatistics(documentFileUpload);
-			//					break;
-			//				case 3:	
-			//					specialtyDocUpload(documentFileUpload);
-			//					break;
-			//				default:
-			//					specialtyDocUpload(documentFileUpload);
-			//					break;
-			//			}
+			
 			
 			model.addAttribute("documentuploadsuccess","success.save.questions");
 		}catch (Exception e) {

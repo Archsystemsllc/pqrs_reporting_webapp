@@ -1,0 +1,35 @@
+/**
+ * 
+ */
+package com.archsystemsinc.pqrs.service.impl;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.archsystemsinc.pqrs.model.ReportingOptionLookup;
+import com.archsystemsinc.pqrs.repository.ReportingOptionLookupRepository;
+import com.archsystemsinc.pqrs.service.ReportingOptionLookUpService;
+
+/**
+ * This is the implementation class of Service interface for reporting_option_lookup database table.
+ * 
+ * @author Murugaraj Kandaswamy
+ * @since 6/21/2017
+ * 
+ */
+@Service
+public class ReportingOptionLookUpServiceImpl implements ReportingOptionLookUpService {
+
+	@Autowired
+	private ReportingOptionLookupRepository reportingOptionLookupRepository;
+	
+	/* (non-Javadoc)
+	 * @see com.archsystemsinc.pqrs.service.ReportingOptionLookUpService#findByReportingOptionName(java.lang.String)
+	 */
+	@Override
+	public ReportingOptionLookup findByReportingOptionName(String reportingOptionName) {
+		// TODO Auto-generated method stub
+		return reportingOptionLookupRepository.findByReportingOptionName(reportingOptionName);
+	}
+
+}

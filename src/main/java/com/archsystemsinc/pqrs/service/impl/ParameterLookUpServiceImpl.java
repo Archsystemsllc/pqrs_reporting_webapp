@@ -3,6 +3,8 @@
  */
 package com.archsystemsinc.pqrs.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,5 +32,15 @@ public class ParameterLookUpServiceImpl implements ParameterLookUpService {
 	public ParameterLookup findByParameterName(String parameterName) {
 		return parameterLookUpRepository.findByParameterName(parameterName);
 	}
+
+	/* (non-Javadoc)
+	 * @see com.archsystemsinc.pqrs.service.ParameterLookUpService#findAll()
+	 */
+	@Override
+	public List<ParameterLookup> findAll() {
+		return parameterLookUpRepository.findAll();
+	}
+	
+	
 
 }

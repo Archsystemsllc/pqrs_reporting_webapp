@@ -3,6 +3,8 @@
  */
 package com.archsystemsinc.pqrs.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +30,15 @@ public class ReportingOptionLookUpServiceImpl implements ReportingOptionLookUpSe
 	 */
 	@Override
 	public ReportingOptionLookup findByReportingOptionName(String reportingOptionName) {
-		// TODO Auto-generated method stub
 		return reportingOptionLookupRepository.findByReportingOptionName(reportingOptionName);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.archsystemsinc.pqrs.service.ReportingOptionLookUpService#findAll()
+	 */
+	@Override
+	public List<ReportingOptionLookup> findAll() {
+		return reportingOptionLookupRepository.findAll();
 	}
 
 }

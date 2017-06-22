@@ -40,7 +40,21 @@
       <div class="content">
       
 	  <form:form action="/admin/documentupload/" modelAttribute="documentFileUpload"
-			enctype="multipart/form-data" method="post">			
+			enctype="multipart/form-data" method="post">	
+			<c:if test="${not empty documentuploadsuccess}">
+			<br/>
+				<div class="successblock">
+					<spring:message code="${documentuploadsuccess}"></spring:message>
+				</div>
+			</c:if>
+			<c:if test="${not empty documentuploaderror}">
+			<br/>
+			    <p>${documentuploaderror}</p>
+				<!--<div class="successblock">				    
+					<spring:message code="${documentuploaderror}"></spring:message>
+				</div>-->
+			</c:if>																									
+			<form:errors path="*" cssClass="errorblock" element="div" />		
 			<p>
 				Document Provider :
 				<form:input type="file" path="provider" size="40"/>
@@ -50,16 +64,16 @@
 				<input type="reset" value="Reset">
 			</div>
 			<p>
-				Document Statewise :
-				<form:input type="file" path="statewise" size="40"/>
+				Document Specialty :
+				<form:input type="file" path="specialty" size="40"/>				
 			</p>
 			<div>
 				<input type="submit" value="Upload">
 				<input type="reset" value="Reset">
 			</div>
 			<p>
-				Document Specialty :
-				<form:input type="file" path="specialty" size="40"/>
+				Document Statewise :
+				<form:input type="file" path="statewise" size="40"/>
 			</p>
 			<div>
 				<input type="submit" value="Upload">

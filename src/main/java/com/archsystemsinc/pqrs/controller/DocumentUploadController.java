@@ -81,16 +81,29 @@ public class DocumentUploadController {
 			final BindingResult result, final HttpServletRequest request) throws InvalidFormatException {		
 		
 		try {
-			stateWiseStatistics(documentFileUpload);
+			//
+			//documentUploadProvider(documentFileUpload);			
 			
-			
+			if(documentFileUpload.getProvider().getSize() > 0){
+				documentFileUpload.setDocumentTypeId(1L);
+				documentUploadProvider(documentFileUpload);
+			}else if(documentFileUpload.getSpecialty().getSize() > 0){
+				documentFileUpload.setDocumentTypeId(2L);
+				specialtyDocUpload(documentFileUpload);
+			}else if(documentFileUpload.getStatewise().getSize() > 0){
+				documentFileUpload.setDocumentTypeId(3L);
+				stateWiseStatistics(documentFileUpload);
+			}			
+            
 			model.addAttribute("documentuploadsuccess","success.save.questions");
 		}catch (Exception e) {
 			System.out.println("Exception in Documents Upload page: " + e.getMessage());	
 			e.printStackTrace();
 			model.addAttribute("documentuploaderror","error.save.document");
-		}		
+			//model.addAttribute("documentuploaderror","File format error");
+		}	
 		
+		model.addAttribute("documentFileUpload", new DocumentUpload());
 		return "uploadform";
 	}
 
@@ -238,7 +251,16 @@ public class DocumentUploadController {
 								{
 								
 				                case Cell.CELL_TYPE_NUMERIC:	
-				                	provider.setTotalSum(BigInteger.valueOf((int)hssfCell.getNumericCellValue()));
+				                	provider.setTotalSum(BigInteger.valueOf((int)hssfCell.getNumericCellValue()));				                					                    
+				                    break;								
+								}
+								break;
+							case 11:
+								switch (hssfCell.getCellType())
+								{
+								
+				                case Cell.CELL_TYPE_NUMERIC:	
+				                	provider.setRpPercent(hssfCell.getNumericCellValue());
 				                	providerHypothesisService.create(provider);				                    
 				                    break;								
 								}
@@ -252,11 +274,6 @@ public class DocumentUploadController {
 					}
  
 				}
-				
-				
-				
-				
-
 			}			
 
 	}

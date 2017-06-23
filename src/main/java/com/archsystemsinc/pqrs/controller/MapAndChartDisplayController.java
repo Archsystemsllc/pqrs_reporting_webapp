@@ -35,6 +35,7 @@ public class MapAndChartDisplayController {
 	@Autowired
 	private YearLookUpService yearLookUpService;
 	
+	
 	@Autowired
 	private ParameterLookUpService parameterLookUpService;
 	
@@ -61,10 +62,8 @@ public class MapAndChartDisplayController {
 		
 		model.addAttribute("reportTypes", reportTypes);
 		
-		
 		return "mapandchartdisplay";
 		
 	}
-	
 	
 }

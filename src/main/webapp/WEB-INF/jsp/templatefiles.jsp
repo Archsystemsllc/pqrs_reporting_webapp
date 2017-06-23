@@ -84,7 +84,7 @@
 		</table>
 		
 		<form:form action="/admin/new-template/" modelAttribute="templateFile"
-			enctype="multipart/form-data" method="post">
+			enctype="multipart/form-data" method="post">		
 			<p>
 				Description:<br>
 				<form:input type="text" path="uploadedDescription" size="30"/>

@@ -107,10 +107,10 @@ public class ProviderHypothesisServiceImpl implements ProviderHypothesisService 
 			uniqueYears.add(yearLookup.getYearName());
 		}*/
 		
-		uniqueYears.add("\""+YearNameEnum.BASE_YEAR.getYearName()+"\"");
-		uniqueYears.add("\""+YearNameEnum.OPTIONAL_YEAR_1.getYearName()+"\"");
-		uniqueYears.add("\""+YearNameEnum.OPTIONAL_YEAR_2.getYearName()+"\"");
-		uniqueYears.add("\""+YearNameEnum.OPTIONAL_YEAR_3.getYearName()+"\"");
+		uniqueYears.add(YearNameEnum.BASE_YEAR.getYearName()+"");
+		uniqueYears.add(YearNameEnum.OPTIONAL_YEAR_1.getYearName()+"");
+		uniqueYears.add(YearNameEnum.OPTIONAL_YEAR_2.getYearName()+"");
+		uniqueYears.add(YearNameEnum.OPTIONAL_YEAR_3.getYearName()+"");
 		
 		return uniqueYears;
 		
@@ -157,18 +157,12 @@ public class ProviderHypothesisServiceImpl implements ProviderHypothesisService 
 		return true;
 	}
 
-	
-
 	private void sortRPPercentByYear(Map<String, Double> rpPercentMap, List<Double> rpPercents) {
 		rpPercents.add(rpPercentMap.get(YearNameEnum.BASE_YEAR.getYearName()));
 		rpPercents.add(rpPercentMap.get(YearNameEnum.OPTIONAL_YEAR_1.getYearName()));
 		rpPercents.add(rpPercentMap.get(YearNameEnum.OPTIONAL_YEAR_2.getYearName()));
 		rpPercents.add(rpPercentMap.get(YearNameEnum.OPTIONAL_YEAR_3.getYearName()));
 	}
-
-
-
-
 
 }
 

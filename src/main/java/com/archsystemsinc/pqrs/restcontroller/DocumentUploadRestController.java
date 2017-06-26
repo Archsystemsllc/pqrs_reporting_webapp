@@ -472,7 +472,7 @@ public class DocumentUploadRestController {
 								switch (hssfCell.getCellType())
 								{								
 								case Cell.CELL_TYPE_STRING:									
-									stringResult=hssfCell.getStringCellValue();									
+									 stringResult=hssfCell.getStringCellValue();									
 									specialty.setReportingOptionLookup(reportingOptionLookUpService.findByReportingOptionName(stringResult));
 									specialtyService.create(specialty);
 				                    break;								

@@ -3,6 +3,8 @@
  */
 package com.archsystemsinc.pqrs.service;
 
+import java.util.List;
+
 import com.archsystemsinc.pqrs.model.ReportingOptionLookup;
 
 /**
@@ -15,5 +17,7 @@ import com.archsystemsinc.pqrs.model.ReportingOptionLookup;
 public interface ReportingOptionLookUpService {
 
 	ReportingOptionLookup findByReportingOptionName(final String reportingOptionName);
+	
+	List<ReportingOptionLookup> findAll();
 	
 }

@@ -11,11 +11,26 @@
    
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">      
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
     
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/Chart.bundle.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/utils.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
- 
+    <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
+    
+    <style>
+		#map {
+			width: 600px;
+			height: 400px;
+		}
+	</style>
+
+	<style>
+	   #map { width: 800px; height: 500px; }
+       .info { padding: 6px 8px; font: 14px/16px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+       .legend { text-align: left; line-height: 18px; color: #555; } 
+       .legend i { width: 18px; height: 18px; float: left; margin-right: 8px; opacity: 0.7; }
+    </style>
 </head> 
 
 <body>
@@ -71,6 +86,17 @@
 		</select>
 		</td>
 	</tr>
+	
+	<tr id="yesOrNoOptionRow" hidden="true">
+		<td><label for="yesOrNoOptionId">Yes/No Option :</label> </td>
+		<td>
+		<select id="yesOrNoOptionId" name="yesOrNoOptionId">
+			<option value="">Select</option>
+			<option value="0">No</option>
+			<option value="1">Yes</option>
+		</select>
+		</td>
+	</tr>
 
 	<tr>
 		<td></td>
@@ -83,6 +109,8 @@
 
 </div>
 
+    <iframe id='mapIframe' hidden="true" frameborder="0" scrolling="no" width="100%" height="5000" ></iframe>
+
     <div id="container" style="width: 75%;">
         <canvas id="canvas"></canvas>
     </div>
@@ -91,7 +119,6 @@
     
     <div id ="lineChartDisplay"></div>
     
-
 <script>
 	var btn = document.getElementById("displayreport");
 	var barChartData =null;
@@ -99,6 +126,7 @@
 	
 	btn.addEventListener("click", function(){
 		
+		var yesOrNoOptionId = $("#yesOrNoOptionId option:selected").text();
 	    var reportTypeSelectedVal = $("#reportTypeId option:selected").text();
 	    var yearLookUpSelectedVal = $("#yearLookUpId option:selected").text();
 	    var reportingOptionLookupSelectedVal = $("#reportingOptionLookupId option:selected").text();
@@ -111,14 +139,28 @@
 	    	var url = 'http://localhost:8080/lineChart/parameter/'+parameterLookupSelectedVal;
 	    } 
 	    if (reportTypeSelectedVal == "Map"){
-	    	<!-- TODO -->
+	    	document.getElementById("mapIframe").hidden = false;
+	    	var epGpro = '0';
+	    	if(reportingOptionLookupSelectedVal == "CLAIMS" || reportingOptionLookupSelectedVal == "EHR" 
+	    			|| reportingOptionLookupSelectedVal == "REGISTRY"
+	    			|| reportingOptionLookupSelectedVal == "QCDR") {
+	    		epGpro = '1';
+	    	}else if(reportingOptionLookupSelectedVal == "GPROWI" || reportingOptionLookupSelectedVal == "GPRO Registry" 
+	    			|| reportingOptionLookupSelectedVal == "GPRO EHR"
+	    			|| reportingOptionLookupSelectedVal == "GPRO WI GROP") {
+	    		epGpro = '2';
+	    	}
+	    	var ruralUrbanId = document.getElementById("parameterLookupId").value;
+	    	var yesNoId = document.getElementById("yesOrNoOptionId").value;
+	    	var yearId = document.getElementById("yearLookUpId").value;
+	    	var reportingOptionId = document.getElementById("reportingOptionLookupId").value;
+	    	var url = 'http://localhost:8080/maps/epOrGpro/'+ epGpro+'/ruralOrUrban/'+ ruralUrbanId +'/yesOrNoOption/'+ yesNoId +'/yearId/'+ yearId +'/reportingOptionId/'+ reportingOptionId;
+ 	        document.getElementById("mapIframe").src=url;
 	    } 
 		
 	    var ourRequest = new XMLHttpRequest();
 	    ourRequest.open('GET', url);
 	    ourRequest.onload = function(){
-	    	
-	    	
 		    if (reportTypeSelectedVal == "Bar Chart")
 		    {
 		    	barChartData = JSON.parse(ourRequest.responseText);
@@ -288,13 +330,16 @@
 		        <!-- LINE CHART :: JAVA SCRIPT ###### END  -->
 		        
 		    } <!-- Line Chart If Logic Ends-->
-	        
-	        
+	        if(reportTypeSelectedVal == "Map") {
+	        	<!-- TODO for Map-->
+	        }
+	        <!-- MAP ENDS -->
 	        
             var ctx = document.getElementById("canvas").getContext("2d");
             
             <!-- Different Chart Display :: START -->
     	    if (reportTypeSelectedVal == "Bar Chart"){
+    	    	document.getElementById("mapIframe").hidden = true;
     	    	document.getElementById("lineChartDisplay").innerHTML = "";
     	    	if (barChartDataAvail == "YES") {
     	    		document.getElementById("barChartDisplay").innerHTML = new Chart(ctx, barconfig);
@@ -305,11 +350,13 @@
     	    	
     	    } 
     	    if (reportTypeSelectedVal == "Line Chart"){
+    	    	document.getElementById("mapIframe").hidden = true;
     	    	document.getElementById("lineChartDisplay").innerHTML = new Chart(ctx, lineconfig);
     	    	document.getElementById("barChartDisplay").innerHTML = "";
     	    } 
     	    if (reportTypeSelectedVal == "Map"){
     	    	<!-- TODO for Map-->
+    	    	
     	    } 
             <!-- Different Chart Display :: END -->
 	        
@@ -322,10 +369,23 @@
 	
 	function renderHTML(data) {
 	};
+	
+	document.getElementById("reportTypeId").onchange = function() {
+		 var x = document.getElementById("reportTypeId").value;
+		 if(x == 'Map') {
+			 var x = document.getElementById("yesOrNoOptionRow")
+			 x.hidden = false;
+		 }else {
+			 var x = document.getElementById("yesOrNoOptionRow")
+			 x.hidden = true;
+		 }
+	};
+
 </script>
 
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
+
 </body>
 </html>

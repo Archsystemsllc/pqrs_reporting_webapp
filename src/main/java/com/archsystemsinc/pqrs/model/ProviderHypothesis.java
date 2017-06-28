@@ -71,7 +71,18 @@ public class ProviderHypothesis implements Serializable {
 	@ManyToOne(cascade = {CascadeType.ALL})
 	@JoinColumn(name="parameter_id")
 	private ParameterLookup parameterLookup;
+	
+	//bi-directional many-to-one association to DataAnalysis
+	@ManyToOne
+	@JoinColumn(name="data_analysis_id")
+	private DataAnalysis dataAnalysis;
+	
+	//bi-directional many-to-one association to SubDataAnalysis
+	@ManyToOne
+	@JoinColumn(name="sub_data_analysis_id")
+	private SubDataAnalysis subDataAnalysis;
 
+	
 	public ProviderHypothesis() {
 	}
 
@@ -170,6 +181,33 @@ public class ProviderHypothesis implements Serializable {
 	public void setParameterLookup(ParameterLookup parameterLookup) {
 		this.parameterLookup = parameterLookup;
 	}
-	
+
+	/**
+	 * @return the dataAnalysis
+	 */
+	public DataAnalysis getDataAnalysis() {
+		return dataAnalysis;
+	}
+
+	/**
+	 * @param dataAnalysis the dataAnalysis to set
+	 */
+	public void setDataAnalysis(DataAnalysis dataAnalysis) {
+		this.dataAnalysis = dataAnalysis;
+	}
+
+	/**
+	 * @return the subDataAnalysis
+	 */
+	public SubDataAnalysis getSubDataAnalysis() {
+		return subDataAnalysis;
+	}
+
+	/**
+	 * @param subDataAnalysis the subDataAnalysis to set
+	 */
+	public void setSubDataAnalysis(SubDataAnalysis subDataAnalysis) {
+		this.subDataAnalysis = subDataAnalysis;
+	}
 
 }

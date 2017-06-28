@@ -9,7 +9,7 @@ package com.archsystemsinc.pqrs.constant;
  */
 public enum ReportingOptionEnum {
 
-	CLAIM("CLAIM"),
+	CLAIMS("CLAIMS"),
 	EHR("EHR"),
 	REGISTRY("REGISTRY"),
 	GPROWI("GPROWI"),

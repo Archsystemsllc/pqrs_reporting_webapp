@@ -8,13 +8,12 @@
 	<title>INTERACTIVE MAPS</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-   
-    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">      
-    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
-    
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/Chart.bundle.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/utils.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/utils.js"></script> 
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/common.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
     
@@ -123,6 +122,7 @@
 	var btn = document.getElementById("displayreport");
 	var barChartData =null;
 	var lineChartData =null;
+	var serverContextPath = '${pageContext.request.contextPath}';
 	
 	btn.addEventListener("click", function(){
 		
@@ -133,10 +133,10 @@
 	    var parameterLookupSelectedVal = $("#parameterLookupId option:selected").text();
 	    
 	    if (reportTypeSelectedVal == "Bar Chart"){
-	    	var url = 'http://localhost:8080/barChart/year/'+yearLookUpSelectedVal+'/reportingOption/'+reportingOptionLookupSelectedVal;
+	    	var url = 'http://localhost:8080'+serverContextPath+'/barChart/year/'+yearLookUpSelectedVal+'/reportingOption/'+reportingOptionLookupSelectedVal;
 	    } 
 	    if (reportTypeSelectedVal == "Line Chart"){
-	    	var url = 'http://localhost:8080/lineChart/parameter/'+parameterLookupSelectedVal;
+	    	var url = 'http://localhost:8080'+serverContextPath+'/lineChart/parameter/'+parameterLookupSelectedVal;
 	    } 
 	    if (reportTypeSelectedVal == "Map"){
 	    	document.getElementById("mapIframe").hidden = false;
@@ -154,7 +154,7 @@
 	    	var yesNoId = document.getElementById("yesOrNoOptionId").value;
 	    	var yearId = document.getElementById("yearLookUpId").value;
 	    	var reportingOptionId = document.getElementById("reportingOptionLookupId").value;
-	    	var url = 'http://localhost:8080/maps/epOrGpro/'+ epGpro+'/ruralOrUrban/'+ ruralUrbanId +'/yesOrNoOption/'+ yesNoId +'/yearId/'+ yearId +'/reportingOptionId/'+ reportingOptionId;
+	    	var url = 'http://localhost:8080'+serverContextPath+'/maps/epOrGpro/'+ epGpro+'/ruralOrUrban/'+ ruralUrbanId +'/yesOrNoOption/'+ yesNoId +'/yearId/'+ yearId +'/reportingOptionId/'+ reportingOptionId;
  	        document.getElementById("mapIframe").src=url;
 	    } 
 		
@@ -235,7 +235,7 @@
 		                            display: true,
 		                            scaleLabel: {
 		                                display: true,
-		                                labelString: 'REPORTING OPTION'
+		                                labelString: 'PARAMETER'
 		                            },
 		    	                    ticks: {
 		    	                        display: true,

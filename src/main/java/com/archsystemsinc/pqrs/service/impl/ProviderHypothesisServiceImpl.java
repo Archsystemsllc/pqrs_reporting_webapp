@@ -132,7 +132,7 @@ public class ProviderHypothesisServiceImpl implements ProviderHypothesisService 
 			
 			//uniqueYears.add("\""+providerHypothesis.getYearLookup().getYearName()+"\"");
 			
-			if (providerHypothesis.getReportingOptionLookup().getReportingOptionName().equalsIgnoreCase(ReportingOptionEnum.CLAIM.getReportingOptionName())) {
+			if (providerHypothesis.getReportingOptionLookup().getReportingOptionName().equalsIgnoreCase(ReportingOptionEnum.CLAIMS.getReportingOptionName())) {
 				claimsPercentMap.put(providerHypothesis.getYearLookup().getYearName(), providerHypothesis.getRpPercent()==0.0 ? null : providerHypothesis.getRpPercent());
 			} else if (providerHypothesis.getReportingOptionLookup().getReportingOptionName().equalsIgnoreCase(ReportingOptionEnum.EHR.getReportingOptionName())) {
 				ehrPercentMap.put(providerHypothesis.getYearLookup().getYearName(), providerHypothesis.getRpPercent()==0.0 ? null : providerHypothesis.getRpPercent());

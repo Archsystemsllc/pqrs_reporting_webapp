@@ -164,8 +164,10 @@
 		    if (reportTypeSelectedVal == "Bar Chart")
 		    {
 		    	barChartData = JSON.parse(ourRequest.responseText);
-		        console.log(barChartData);
+		        //console.log(barChartData);
 		        var barChartDataAvail = barChartData.dataAvailable;
+		        var yesCountValues = barChartData.yesCountValues;
+		        var noCountValues = barChartData.noCountValues;
 		        
 		    	<!-- BAR CHART :: JAVA SCRIPT ###### START  -->
 		    	var barChartData = {
@@ -192,6 +194,30 @@
 		                        display:true,
 		                        text:'Base Year(2012) to Option Year 3(2015) REGISTRY Reporting Option Eligible Professionals Summary'
 		                    },
+	    				    animation: {
+  	    				      duration: 1,
+  	    				      onComplete: function() {
+  	    				        var chartInstance = this.chart,
+  	    				        ctx = chartInstance.ctx;
+
+  	    				        ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, Chart.defaults.global.defaultFontStyle, Chart.defaults.global.defaultFontFamily);
+  	    				        ctx.textAlign = 'center';
+  	    				        ctx.textBaseline = 'bottom';
+
+  	    				        this.data.datasets.forEach(function(dataset, i) {
+  	    				          var meta = chartInstance.controller.getDatasetMeta(i);
+  	    				          meta.data.forEach(function(bar, index) { 
+	  	    				          console.log(bar._view.datasetLabel);
+	  	    				          var data = yesCountValues[index];
+ 	  	    				          if(bar._view.datasetLabel == "NO"){
+	  	    				        	data = noCountValues[index];
+	  	    				          }
+  	    				          
+  	    				              ctx.fillText(data, bar._model.x, bar._model.y - 5);
+  	    				          });
+  	    				        });
+  	    				      }
+  	    				    },
 		                    legend: {
 		                        position: 'bottom',
 		                    },
@@ -199,6 +225,7 @@
 		                        mode: 'index',
 		                        intersect: true,
 		                    },
+		                    
 		                    hover: {
 		                        mode: 'nearest',
 		                        intersect: true,
@@ -244,7 +271,7 @@
 		    if (reportTypeSelectedVal == "Line Chart")
 		    {
 		    	lineChartData = JSON.parse(ourRequest.responseText);
-		        console.log(lineChartData);
+		        //console.log(lineChartData);
 		        
 		        <!-- LINE CHART :: JAVA SCRIPT ###### START  -->
 		        var titletext = 'Base Year to Option Year 3 ' + 'Mental Health HPSA' + ' Percentage Summary'
@@ -350,9 +377,11 @@
     	    	
     	    } 
     	    if (reportTypeSelectedVal == "Line Chart"){
+    	    	document.getElementById("barChartDisplay").innerHTML = "";
     	    	document.getElementById("mapIframe").hidden = true;
     	    	document.getElementById("lineChartDisplay").innerHTML = new Chart(ctx, lineconfig);
     	    	document.getElementById("barChartDisplay").innerHTML = "";
+    	    	barChartDisplay.clear();
     	    } 
     	    if (reportTypeSelectedVal == "Map"){
     	    	<!-- TODO for Map-->
@@ -382,10 +411,6 @@
 	};
 
 </script>
-
-<!-- /container -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 
 </body>
 </html>

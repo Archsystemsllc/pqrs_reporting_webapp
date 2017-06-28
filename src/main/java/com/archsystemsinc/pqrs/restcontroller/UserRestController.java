@@ -14,7 +14,7 @@ import com.archsystemsinc.pqrs.service.UserService;
 import com.archsystemsinc.pqrs.validator.UserValidator;
 
 @RestController
-@RequestMapping("/rest/api")
+@RequestMapping("/api")
 public class UserRestController {
 	@Autowired
     private UserService userService;

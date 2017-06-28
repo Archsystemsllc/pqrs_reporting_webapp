@@ -96,8 +96,7 @@
 			<div>
 				<input type="submit" value="Send">
 			</div>
-		</form:form>
-
+		</form:form>		
        </div>
     </div>
   </div>

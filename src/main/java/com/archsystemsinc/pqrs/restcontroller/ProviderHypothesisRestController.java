@@ -18,7 +18,7 @@ import com.archsystemsinc.pqrs.model.ProviderHypothesis;
 import com.archsystemsinc.pqrs.service.ProviderHypothesisService;
 
 @RestController
-@RequestMapping("/rest/api")
+@RequestMapping("/api")
 public class ProviderHypothesisRestController {
 	@Autowired
 	private ProviderHypothesisService providerHypothesisService;
@@ -26,7 +26,7 @@ public class ProviderHypothesisRestController {
 	@RequestMapping("/barChart/year/{year}/reportingOption/{reportingOption}")
     public Map zipcodes(@PathVariable("year") String year, @PathVariable("reportingOption") String reportingOption, HttpServletRequest request, Principal currentUser, Model model) {
 		
-		Map<String,List<?>> barChartMap = new LinkedHashMap<>();		
+		Map<String,List<?>> barChartMapData = new LinkedHashMap<>();		
 		
 		final List<ProviderHypothesis> providerHypothesisList = providerHypothesisService.findByYearLookupAndReportingOptionLookup(year, reportingOption);		
 		
@@ -40,17 +40,17 @@ public class ProviderHypothesisRestController {
 			noPercents.add(providerHypothesis.getNoPercent());
 		}
 		
-		barChartMap.put("parameters", parameters);
-		barChartMap.put("yesPercents", yesPercents);
-		barChartMap.put("noPercents", noPercents);
-        return barChartMap;
+		barChartMapData.put("parameters", parameters);
+		barChartMapData.put("yesPercents", yesPercents);
+		barChartMapData.put("noPercents", noPercents);
+        return barChartMapData;
     }
 	
 	@RequestMapping("/lineChart/parameter/{parameter}")
     public Map lineChart(@PathVariable("parameter") String parameterName, HttpServletRequest request, Principal currentUser, Model model) {
 
 		//model.addAttribute("parameterName", parameterName);
-		Map<String,List<?>> lineChartMap = new LinkedHashMap<>();
+		Map<String,List<?>> lineChartMapData = new LinkedHashMap<>();
 		
 		final List<ProviderHypothesis> providerHypothesisList = providerHypothesisService.findByParameterLookup(parameterName);
 		
@@ -63,14 +63,14 @@ public class ProviderHypothesisRestController {
 		
 		providerHypothesisService.setRPPercentValue(providerHypothesisList, claimsPercents, ehrPercents, registryPercents, gprowiPercents, qcdrPercents);
 		
-		lineChartMap.put("uniqueYears", uniqueYears);
-		lineChartMap.put("claimsPercents", claimsPercents);
-		lineChartMap.put("ehrPercents", ehrPercents);
-		lineChartMap.put("registryPercents", registryPercents);
-		lineChartMap.put("gprowiPercents", gprowiPercents);
-		lineChartMap.put("qcdrPercents", qcdrPercents);
+		lineChartMapData.put("uniqueYears", uniqueYears);
+		lineChartMapData.put("claimsPercents", claimsPercents);
+		lineChartMapData.put("ehrPercents", ehrPercents);
+		lineChartMapData.put("registryPercents", registryPercents);
+		lineChartMapData.put("gprowiPercents", gprowiPercents);
+		lineChartMapData.put("qcdrPercents", qcdrPercents);
 		
-        return lineChartMap;
+        return lineChartMapData;
     }
 
 }

@@ -42,7 +42,7 @@ import com.archsystemsinc.pqrs.service.StatewiseStatisticService;
 import com.archsystemsinc.pqrs.service.YearLookUpService;
 
 @RestController
-@RequestMapping("/rest/api")
+@RequestMapping("/api")
 public class DocumentUploadRestController {
 	@Autowired
 	private ProviderHypothesisService providerHypothesisService;
@@ -81,6 +81,8 @@ public class DocumentUploadRestController {
 		}catch (Exception e) {
 			System.out.println("Exception in file import: " + e.getMessage());	
 			e.printStackTrace();
+			return new ResponseEntity("Exception thrown - " +
+					 documentFileUpload.getDocumentTypeId(), new HttpHeaders(), HttpStatus.OK);
 			
 		}	
 		 return new ResponseEntity("Successfully uploaded - " +

@@ -32,7 +32,7 @@ import com.archsystemsinc.pqrs.model.TemplateFile;
 import com.archsystemsinc.pqrs.service.TemplateFileService;
 
 @RestController
-@RequestMapping("/rest/api")
+@RequestMapping("/api")
 public class TemplateFileRestController {
 	@Autowired
 	private TemplateFileService templateFileService;
@@ -43,17 +43,17 @@ public class TemplateFileRestController {
 	}
 	
 	// Single file upload
-    //@PostMapping("/templates/upload")  
-    @RequestMapping(value = "/templates/upload", consumes = MediaType.APPLICATION_JSON_VALUE, method = RequestMethod.POST)
+    @PostMapping("/templates/upload")  
+    //@RequestMapping(value = "/templates/upload", consumes = MediaType., method = RequestMethod.POST)
     public ResponseEntity<?> uploadFile(
-    		@RequestBody final TemplateFile templateFile){//MultipartFile uploadfile) {
-
-    	MultipartFile uploadedFile = null;
+    		//@RequestBody final TemplateFile templateFile){//MultipartFile uploadfile) {
+    	@RequestParam("file") MultipartFile uploadedFile){
+    	//MultipartFile uploadedFile = null;
 		ByteArrayOutputStream outputStreamBuffer = null;
-		
+		TemplateFile templateFile = new TemplateFile();
 	  try {
 			/*File Upload Code - Start */
-			uploadedFile = templateFile.getUploadFile();		
+			//uploadedFile = templateFile.getUploadFile();		
 			
 			if(uploadedFile != null && !uploadedFile.isEmpty()) {
 				InputStream inputStream = uploadedFile.getInputStream();
@@ -76,6 +76,8 @@ public class TemplateFileRestController {
 			//redirectAttributes.addFlashAttribute("success", "success.save.file");
 		}catch (Exception e) {			
 			e.printStackTrace();
+			return new ResponseEntity("Exception in file upload: " +
+	                uploadedFile.getOriginalFilename(), new HttpHeaders(), HttpStatus.OK);
 		}
 		//return "redirect:../templates";
 

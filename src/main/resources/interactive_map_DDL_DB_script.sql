@@ -191,7 +191,7 @@ CREATE TABLE `provider_Hypothesis` (
   `no_percent` double DEFAULT NULL,
   `total_sum` bigint(255) DEFAULT NULL,
   `rp_percent` double DEFAULT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`), 
   KEY `provider_hypothesis_reporting_option_index` (`reporting_option_id`),
   KEY `provider_hypothesis_year_lookup_index` (`year_id`),
   KEY `FK_ParameterProviderHypothesis` (`parameter_id`),
@@ -201,3 +201,21 @@ CREATE TABLE `provider_Hypothesis` (
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
 
 --- Author: Murugaraj Kandaswamy Date : 6/27/2017  ## COMPLETE SCRIPT ---- END
+
+--- Author: Murugaraj Kandaswamy Date : 6/28/2017  ## COMPLETE SCRIPT ---- start
+ALTER TABLE interactive_maps_uat.provider_Hypothesis 
+ADD COLUMN `data_analysis_id` INT NULL AFTER `rp_percent`,
+ADD COLUMN `sub_data_analysis_id` INT NULL AFTER `data_analysis_id`;
+
+update interactive_maps_uat.provider_Hypothesis set data_analysis_id = 1, sub_data_analysis_id = 1
+where id in (1,2,3,4,5,6,7,8,25,26,27,28,9,10,11,12,13,14,15,16,17,18,19,24,20,21,22,23);
+
+ALTER TABLE interactive_maps_uat.provider_Hypothesis
+ADD CONSTRAINT FK_DataAnalysisProviderHypothesis
+FOREIGN KEY (data_analysis_id) REFERENCES data_analysis(id);
+
+ALTER TABLE interactive_maps_uat.provider_hypothesis
+ADD CONSTRAINT FK_SubDataAnalysisProviderHypothesis
+FOREIGN KEY (sub_data_analysis_id) REFERENCES sub_data_analysis(id);
+--- Author: Murugaraj Kandaswamy Date : 6/28/2017  ## COMPLETE SCRIPT ---- end
+

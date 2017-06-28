@@ -16,6 +16,8 @@ public class DataAnalysis implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(unique=true, nullable=false)
 	private int id;
 
 	@Column(name="data_analysis_description")
@@ -24,7 +26,11 @@ public class DataAnalysis implements Serializable {
 	@Column(name="data_analysis_name")
 	private String dataAnalysisName;
 
-	//bi-directional many-to-one association to SubDataAnalysis
+	//bi-directional many-to-one association to ProviderHypothesi
+	@OneToMany(mappedBy="dataAnalysis")
+	private List<ProviderHypothesis> providerHypothesis;
+
+	//bi-directional many-to-one association to SubDataAnalysi
 	@OneToMany(mappedBy="dataAnalysis")
 	private List<SubDataAnalysis> subDataAnalysis;
 
@@ -55,6 +61,28 @@ public class DataAnalysis implements Serializable {
 		this.dataAnalysisName = dataAnalysisName;
 	}
 
+	public List<ProviderHypothesis> getProviderHypothesis() {
+		return this.providerHypothesis;
+	}
+
+	public void setProviderHypothesis(List<ProviderHypothesis> providerHypothesis) {
+		this.providerHypothesis = providerHypothesis;
+	}
+
+	public ProviderHypothesis addProviderHypothesis(ProviderHypothesis providerHypothesis) {
+		getProviderHypothesis().add(providerHypothesis);
+		providerHypothesis.setDataAnalysis(this);
+
+		return providerHypothesis;
+	}
+
+	public ProviderHypothesis removeProviderHypothesis(ProviderHypothesis providerHypothesis) {
+		getProviderHypothesis().remove(providerHypothesis);
+		providerHypothesis.setDataAnalysis(null);
+
+		return providerHypothesis;
+	}
+
 	public List<SubDataAnalysis> getSubDataAnalysis() {
 		return this.subDataAnalysis;
 	}
@@ -63,14 +91,14 @@ public class DataAnalysis implements Serializable {
 		this.subDataAnalysis = subDataAnalysis;
 	}
 
-	public SubDataAnalysis addSubDataAnalysi(SubDataAnalysis subDataAnalysis) {
+	public SubDataAnalysis addSubDataAnalysis(SubDataAnalysis subDataAnalysis) {
 		getSubDataAnalysis().add(subDataAnalysis);
 		subDataAnalysis.setDataAnalysis(this);
 
 		return subDataAnalysis;
 	}
 
-	public SubDataAnalysis removeSubDataAnalysi(SubDataAnalysis subDataAnalysis) {
+	public SubDataAnalysis removeSubDataAnalysis(SubDataAnalysis subDataAnalysis) {
 		getSubDataAnalysis().remove(subDataAnalysis);
 		subDataAnalysis.setDataAnalysis(null);
 

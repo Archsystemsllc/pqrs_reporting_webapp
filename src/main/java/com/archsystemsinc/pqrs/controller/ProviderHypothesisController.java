@@ -30,9 +30,9 @@ public class ProviderHypothesisController {
 	@Autowired
 	private ProviderHypothesisService providerHypothesisService;
 
-	@RequestMapping("/barChart/year/{year}/reportingOption/{reportingOption}")
+	@RequestMapping("/barChart/dataanalysis/{dataanalysis}/subdataanalysis/{subdataanalysis}/year/{year}/reportingOption/{reportingOption}")
 	@ResponseBody
-    public Map barChartDisplay(@PathVariable("year") String year, @PathVariable("reportingOption") String reportingOption, HttpServletRequest request, Principal currentUser, Model model) {
+    public Map barChartDisplay(@PathVariable("dataanalysis") String dataAnalysisName, @PathVariable("subdataanalysis") String subdataAnalysisName, @PathVariable("year") String year, @PathVariable("reportingOption") String reportingOption, HttpServletRequest request, Principal currentUser, Model model) {
 		//model.addAttribute("filter", filter);
 		model.addAttribute("year", year);
 		model.addAttribute("reportingOption", reportingOption);
@@ -40,7 +40,7 @@ public class ProviderHypothesisController {
 		
 		Map barChartDataMap = new HashMap();
 	
-		final List<ProviderHypothesis> providerHypothesisList = providerHypothesisService.findByYearLookupAndReportingOptionLookup(year, reportingOption);
+		final List<ProviderHypothesis> providerHypothesisList = providerHypothesisService.findByDataAnalysisAndSubDataAnalysisAndYearLookupAndReportingOptionLookup(dataAnalysisName, subdataAnalysisName, year, reportingOption);
 		
 		// Preparing Parameter String Array
 		List<String> parameters = new ArrayList<String>();
@@ -70,15 +70,15 @@ public class ProviderHypothesisController {
     }
 	
 	
-	@RequestMapping("/lineChart/parameter/{parameter}")
+	@RequestMapping("/lineChart/dataanalysis/{dataanalysis}/subdataanalysis/{subdataanalysis}/parameter/{parameter}")
 	@ResponseBody
-    public Map lineChartDisplay(@PathVariable("parameter") String parameterName, HttpServletRequest request, Principal currentUser, Model model) {
+    public Map lineChartDisplay(@PathVariable("dataanalysis") String dataAnalysisName, @PathVariable("subdataanalysis") String subdataAnalysisName, @PathVariable("parameter") String parameterName, HttpServletRequest request, Principal currentUser, Model model) {
 
 		model.addAttribute("parameterName", parameterName);
 		Map lineChartDataMap = new HashMap();
 		String dataAvailable = "NO";
 		
-		final List<ProviderHypothesis> providerHypothesisList = providerHypothesisService.findByParameterLookup(parameterName);
+		final List<ProviderHypothesis> providerHypothesisList = providerHypothesisService.findByDataAnalysisAndSubDataAnalysisAndParameterLookup(dataAnalysisName, subdataAnalysisName, parameterName);
 		
 		if (providerHypothesisList != null && providerHypothesisList.size()>0){
 			dataAvailable = "YES";

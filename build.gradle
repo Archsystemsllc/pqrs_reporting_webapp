@@ -37,6 +37,7 @@ dependencies {
     compile group: 'org.apache.poi', name: 'poi', version: '3.16'
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.16'
     compile('net.sourceforge.nekohtml:nekohtml:1.9.21')
+    compile("org.springframework.boot:spring-boot-starter-tomcat")
     testCompile("org.springframework.boot:spring-boot-starter-test")
     testCompile("org.springframework:spring-test:4.3.8.RELEASE")
     testCompile("org.seleniumhq.selenium:selenium-server:2.34.0")		

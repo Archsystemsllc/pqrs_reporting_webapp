@@ -38,7 +38,7 @@ public class ReferenceDataLoader {
 	public static Map<String, GeoJsonObject> statesGeoData = new HashMap<String, GeoJsonObject>();
 	
 	@PostConstruct
-	private void loadReferenceData() {
+	private void loadReferenceData() {/*
 		referenceData = new HashMap<String, HashMap<Integer, String>>();
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		HashMap<Integer, String> reportingOptions = jdbcTemplate.query("select * from reporting_option_lookup", (ResultSet rs) -> {
@@ -158,6 +158,6 @@ public class ReferenceDataLoader {
         }catch(Exception e){
             e.printStackTrace();
             assert(false);
-        }
+        }*/
 	}
 }

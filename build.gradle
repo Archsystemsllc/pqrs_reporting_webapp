@@ -16,10 +16,6 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
 apply plugin: 'eclipse-wtp'
 
-war {
-    baseName = 'pqrs-reporting-webapp'    
-}
-
 repositories {
     mavenCentral()
 }

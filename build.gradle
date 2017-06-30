@@ -17,8 +17,7 @@ apply plugin: 'war'
 apply plugin: 'eclipse-wtp'
 
 war {
-    baseName = 'pqrs-reporting-webapp'
-    version =  '1.0.0'
+    baseName = 'pqrs-reporting-webapp'    
 }
 
 repositories {

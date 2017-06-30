@@ -38,7 +38,7 @@
 			<c:forEach items="${dataAnalysisList}" var="dataAnalysis">
 				<tr>
 					<td>
-					<a href="${pageContext.request.contextPath}/mapandchartdisplay/hypothesis/hypo1">${dataAnalysis.dataAnalysisName}</a>
+					<a href="${pageContext.request.contextPath}/mapandchartdisplay/dataanalysis/${dataAnalysis.dataAnalysisName}/subdataanalysis/ALL">${dataAnalysis.dataAnalysisName}</a>
 					</td>
 					
 					<td> ${dataAnalysis.dataAnalysisDescription}
@@ -54,9 +54,12 @@
 				</tr>
 				
 				<c:forEach items="${dataAnalysis.subDataAnalysis}" var="subDataAnalysis">
+				
+				<c:if test="${subDataAnalysis.subDataAnalysisName ne 'Not Applicable'}">
+				
 					<tr>
 						<td>
-						<ul> <li> <a href="${pageContext.request.contextPath}/mapandchartdisplay/hypothesis/hypo1">${subDataAnalysis.subDataAnalysisName}</a> </li> </ul>
+						<ul> <li> <a href="${pageContext.request.contextPath}/mapandchartdisplay/dataanalysis/${dataAnalysis.dataAnalysisName}/subdataanalysis/${subDataAnalysis.subDataAnalysisName}">${subDataAnalysis.subDataAnalysisName}</a> </li> </ul>
 						</td>
 						
 						<td> ${subDataAnalysis.subDataAnalysisDescription}
@@ -70,6 +73,8 @@
 						</td>
 				
 					</tr>
+					
+					</c:if>
 				
 				</c:forEach>
 				

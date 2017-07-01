@@ -20,4 +20,17 @@ public class DataAnalysisServiceImpl implements DataAnalysisService {
 		return dataAnalaysisRepository.findAll();
 	}
 
+	@Override
+	public DataAnalysis findById(int id) {
+		// TODO Auto-generated method stub
+		//return dataAnalaysisRepository.findOne(Long.valueOf(id));
+		return dataAnalaysisRepository.findById(id);
+	}
+
+//	@Override
+//	public List<DataAnalysis> findAllByHypoId(Long id) {
+//		// TODO Auto-generated method stub
+//		return dataAnalaysisRepository.findAll(example);
+//	}
+
 }

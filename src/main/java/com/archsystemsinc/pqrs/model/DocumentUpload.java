@@ -13,12 +13,17 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 public class DocumentUpload {
 
     private MultipartFile provider;
-	
+    
+    private int providerHypId;
+    
+    private int providerSubHypId;	
+
 	private MultipartFile specialty;
 	
 	private MultipartFile statewise;	
 	
-	private Long documentTypeId;
+	private Long documentTypeId;	
+	
 
 	public MultipartFile getProvider() {
 		return provider;
@@ -26,8 +31,23 @@ public class DocumentUpload {
 
 	public void setProvider(MultipartFile provider) {
 		this.provider = provider;
+	}	
+
+	public int getProviderHypId() {
+		return providerHypId;
 	}
 
+	public void setProviderHypId(int providerHypId) {
+		this.providerHypId = providerHypId;
+	}
+
+	public int getProviderSubHypId() {
+		return providerSubHypId;
+	}
+
+	public void setProviderSubHypId(int providerSubHypId) {
+		this.providerSubHypId = providerSubHypId;
+	}
 	public MultipartFile getSpecialty() {
 		return specialty;
 	}

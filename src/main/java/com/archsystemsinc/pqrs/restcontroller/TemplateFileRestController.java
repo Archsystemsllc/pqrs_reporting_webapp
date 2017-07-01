@@ -43,10 +43,8 @@ public class TemplateFileRestController {
 	}
 	
 	// Single file upload
-    @PostMapping("/templates/upload")  
-    //@RequestMapping(value = "/templates/upload", consumes = MediaType., method = RequestMethod.POST)
-    public ResponseEntity<?> uploadFile(
-    		//@RequestBody final TemplateFile templateFile){//MultipartFile uploadfile) {
+    @PostMapping("/templates/upload")      
+    public ResponseEntity<?> uploadFile(    		
     	@RequestParam("file") MultipartFile uploadedFile){
     	//MultipartFile uploadedFile = null;
 		ByteArrayOutputStream outputStreamBuffer = null;

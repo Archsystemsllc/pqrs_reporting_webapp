@@ -24,19 +24,22 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
+import com.archsystemsinc.pqrs.model.DataAnalysis;
 import com.archsystemsinc.pqrs.model.DocumentUpload;
 import com.archsystemsinc.pqrs.model.ProviderHypothesis;
 import com.archsystemsinc.pqrs.model.ReportingOptionLookup;
 import com.archsystemsinc.pqrs.model.Speciality;
 import com.archsystemsinc.pqrs.model.StatewiseStatistic;
 import com.archsystemsinc.pqrs.model.YearLookup;
+import com.archsystemsinc.pqrs.service.DataAnalysisService;
 import com.archsystemsinc.pqrs.service.ParameterLookUpService;
 import com.archsystemsinc.pqrs.service.ProviderHypothesisService;
 import com.archsystemsinc.pqrs.service.ReportingOptionLookUpService;
 import com.archsystemsinc.pqrs.service.SpecialityService;
 import com.archsystemsinc.pqrs.service.StatewiseStatisticService;
+import com.archsystemsinc.pqrs.service.SubDataAnalysisService;
 import com.archsystemsinc.pqrs.service.YearLookUpService;
 
 /**
@@ -67,18 +70,26 @@ public class DocumentUploadController {
 	@Autowired
 	private StatewiseStatisticService statewiseStatisticService;
 	
+	@Autowired
+	private DataAnalysisService dataAnalysisService;
+	
+	@Autowired
+	private SubDataAnalysisService subDataAnalysisService;
+	
 	@RequestMapping(value = "/admin/documentupload", method = RequestMethod.GET)
 	public String documentUploadGet(final Model model, HttpSession session) {		
 		
 		model.addAttribute("documentFileUpload", new DocumentUpload());
+		model.addAttribute("dataAnalysisCategories", dataAnalysisService.findAll());
+		model.addAttribute("subDataAnalysisCategories", subDataAnalysisService.findAll());
 		
 		return "uploadform";
 	}
 	
 	@RequestMapping(value = "/admin/documentupload", method = RequestMethod.POST)
-	public String documentUploadPost(final Model model,
+	public String documentUploadPost(
 			@Valid@ModelAttribute("documentFileUpload") final DocumentUpload documentFileUpload, final Principal principal,
-			final BindingResult result, final HttpServletRequest request) throws InvalidFormatException {		
+			final BindingResult result, final HttpServletRequest request, final RedirectAttributes redirectAttributes) throws InvalidFormatException {		
 		
 		try {
 			//
@@ -95,16 +106,16 @@ public class DocumentUploadController {
 				stateWiseStatistics(documentFileUpload);
 			}			
             
-			model.addAttribute("documentuploadsuccess","success.save.questions");
+			redirectAttributes.addFlashAttribute("documentuploadsuccess","success.import.document");
 		}catch (Exception e) {
 			System.out.println("Exception in Documents Upload page: " + e.getMessage());	
 			e.printStackTrace();
-			model.addAttribute("documentuploaderror","error.save.document");
-			//model.addAttribute("documentuploaderror","File format error");
+			redirectAttributes.addFlashAttribute("documentuploaderror","error.import.document");			
 		}	
 		
-		model.addAttribute("documentFileUpload", new DocumentUpload());
-		return "uploadform";
+		//model.addAttribute("documentFileUpload", new DocumentUpload());
+		return "redirect:/admin/documentupload";
+		
 	}
 
 	
@@ -172,7 +183,9 @@ public class DocumentUploadController {
 				                case Cell.CELL_TYPE_STRING:	
 				                	
 				                    stringResult=hssfCell.getStringCellValue();
+				                    System.out.println("Reporting option: " + stringResult);
 				                    provider.setReportingOptionLookup(reportingOptionLookUpService.findByReportingOptionName(stringResult));
+				                    //System.out.println("Reporting option: " + reportingOptionLookUpService.findByReportingOptionName(stringResult).getReportingOptionName());
 				                    break;	
 								
 								}
@@ -261,6 +274,10 @@ public class DocumentUploadController {
 								
 				                case Cell.CELL_TYPE_NUMERIC:	
 				                	provider.setRpPercent(hssfCell.getNumericCellValue());
+				                	provider.setDataAnalysis(dataAnalysisService.findById(documentFileUpload.getProviderHypId()));
+				                	provider.setSubDataAnalysis(subDataAnalysisService.findById(documentFileUpload.getProviderSubHypId()));
+				                	//System.out.println("hyp ID: " + documentFileUpload.getProviderHypId());
+				                	//System.out.println("Sub ID: " + documentFileUpload.getProviderSubHypId());
 				                	providerHypothesisService.create(provider);				                    
 				                    break;								
 								}

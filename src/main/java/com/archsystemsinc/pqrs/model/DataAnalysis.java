@@ -26,13 +26,13 @@ public class DataAnalysis implements Serializable {
 	@Column(name="data_analysis_name")
 	private String dataAnalysisName;
 
-	//bi-directional many-to-one association to ProviderHypothesi
-	@OneToMany(mappedBy="dataAnalysis")
-	private List<ProviderHypothesis> providerHypothesis;
-
-	//bi-directional many-to-one association to SubDataAnalysi
-	@OneToMany(mappedBy="dataAnalysis")
-	private List<SubDataAnalysis> subDataAnalysis;
+//	//bi-directional many-to-one association to ProviderHypothesi
+//	@OneToMany(fetch=FetchType.LAZY, mappedBy="dataAnalysis")
+//	private List<ProviderHypothesis> providerHypothesis;
+//
+//	//bi-directional many-to-one association to SubDataAnalysi
+//	@OneToMany(fetch=FetchType.LAZY, mappedBy="dataAnalysis")
+//	private List<SubDataAnalysis> subDataAnalysis;
 
 	public DataAnalysis() {
 	}
@@ -61,48 +61,48 @@ public class DataAnalysis implements Serializable {
 		this.dataAnalysisName = dataAnalysisName;
 	}
 
-	public List<ProviderHypothesis> getProviderHypothesis() {
-		return this.providerHypothesis;
-	}
+//	public List<ProviderHypothesis> getProviderHypothesis() {
+//		return this.providerHypothesis;
+//	}
+//
+//	public void setProviderHypothesis(List<ProviderHypothesis> providerHypothesis) {
+//		this.providerHypothesis = providerHypothesis;
+//	}
 
-	public void setProviderHypothesis(List<ProviderHypothesis> providerHypothesis) {
-		this.providerHypothesis = providerHypothesis;
-	}
+//	public ProviderHypothesis addProviderHypothesis(ProviderHypothesis providerHypothesis) {
+//		getProviderHypothesis().add(providerHypothesis);
+//		providerHypothesis.setDataAnalysis(this);
+//
+//		return providerHypothesis;
+//	}
+//
+//	public ProviderHypothesis removeProviderHypothesis(ProviderHypothesis providerHypothesis) {
+//		getProviderHypothesis().remove(providerHypothesis);
+//		providerHypothesis.setDataAnalysis(null);
+//
+//		return providerHypothesis;
+//	}
 
-	public ProviderHypothesis addProviderHypothesis(ProviderHypothesis providerHypothesis) {
-		getProviderHypothesis().add(providerHypothesis);
-		providerHypothesis.setDataAnalysis(this);
+//	public List<SubDataAnalysis> getSubDataAnalysis() {
+//		return this.subDataAnalysis;
+//	}
+//
+//	public void setSubDataAnalysis(List<SubDataAnalysis> subDataAnalysis) {
+//		this.subDataAnalysis = subDataAnalysis;
+//	}
 
-		return providerHypothesis;
-	}
-
-	public ProviderHypothesis removeProviderHypothesis(ProviderHypothesis providerHypothesis) {
-		getProviderHypothesis().remove(providerHypothesis);
-		providerHypothesis.setDataAnalysis(null);
-
-		return providerHypothesis;
-	}
-
-	public List<SubDataAnalysis> getSubDataAnalysis() {
-		return this.subDataAnalysis;
-	}
-
-	public void setSubDataAnalysis(List<SubDataAnalysis> subDataAnalysis) {
-		this.subDataAnalysis = subDataAnalysis;
-	}
-
-	public SubDataAnalysis addSubDataAnalysis(SubDataAnalysis subDataAnalysis) {
-		getSubDataAnalysis().add(subDataAnalysis);
-		subDataAnalysis.setDataAnalysis(this);
-
-		return subDataAnalysis;
-	}
-
-	public SubDataAnalysis removeSubDataAnalysis(SubDataAnalysis subDataAnalysis) {
-		getSubDataAnalysis().remove(subDataAnalysis);
-		subDataAnalysis.setDataAnalysis(null);
-
-		return subDataAnalysis;
-	}
+//	public SubDataAnalysis addSubDataAnalysis(SubDataAnalysis subDataAnalysis) {
+//		getSubDataAnalysis().add(subDataAnalysis);
+//		subDataAnalysis.setDataAnalysis(this);
+//
+//		return subDataAnalysis;
+//	}
+//
+//	public SubDataAnalysis removeSubDataAnalysis(SubDataAnalysis subDataAnalysis) {
+//		getSubDataAnalysis().remove(subDataAnalysis);
+//		subDataAnalysis.setDataAnalysis(null);
+//
+//		return subDataAnalysis;
+//	}
 
 }

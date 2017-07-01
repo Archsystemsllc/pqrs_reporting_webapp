@@ -17,5 +17,5 @@ public interface SubDataAnalysisService {
 	List<SubDataAnalysis> findAll();
 	
 	List<SubDataAnalysis> findByDataAnalysis(DataAnalysis dataAnalysis);
-	
+	SubDataAnalysis findById(final int id); 	
 }

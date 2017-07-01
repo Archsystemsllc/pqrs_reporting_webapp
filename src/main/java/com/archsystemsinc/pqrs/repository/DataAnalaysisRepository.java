@@ -12,5 +12,5 @@ import com.archsystemsinc.pqrs.model.DataAnalysis;
  *
  */
 public interface DataAnalaysisRepository extends JpaRepository<DataAnalysis, Long> {
-
+	DataAnalysis findById(final int id); 
 }

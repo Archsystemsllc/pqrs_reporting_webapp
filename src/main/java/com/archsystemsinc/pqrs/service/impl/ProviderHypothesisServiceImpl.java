@@ -10,10 +10,17 @@ import org.springframework.stereotype.Service;
 
 import com.archsystemsinc.pqrs.constant.ReportingOptionEnum;
 import com.archsystemsinc.pqrs.constant.YearNameEnum;
+import com.archsystemsinc.pqrs.model.DataAnalysis;
+import com.archsystemsinc.pqrs.model.ParameterLookup;
 import com.archsystemsinc.pqrs.model.ProviderHypothesis;
+import com.archsystemsinc.pqrs.model.ReportingOptionLookup;
+import com.archsystemsinc.pqrs.model.SubDataAnalysis;
+import com.archsystemsinc.pqrs.model.YearLookup;
+import com.archsystemsinc.pqrs.repository.DataAnalaysisRepository;
 import com.archsystemsinc.pqrs.repository.ParameterLookUpRepository;
 import com.archsystemsinc.pqrs.repository.ProviderHypothesisRepository;
 import com.archsystemsinc.pqrs.repository.ReportingOptionLookupRepository;
+import com.archsystemsinc.pqrs.repository.SubDataAnalysisRepository;
 import com.archsystemsinc.pqrs.repository.YearLookUpRepository;
 import com.archsystemsinc.pqrs.service.ProviderHypothesisService;
 
@@ -38,7 +45,12 @@ public class ProviderHypothesisServiceImpl implements ProviderHypothesisService 
 	
 	@Autowired
 	private ParameterLookUpRepository parameterLookUpRepository;
-
+	
+	@Autowired
+	private DataAnalaysisRepository dataAnalaysisRepository;
+	
+	@Autowired
+	private SubDataAnalysisRepository subDataAnalysisRepository;
 	
 	@Override
 	public List<ProviderHypothesis> findByYearLookupAndReportingOptionLookup(String year, String reportingOption) {
@@ -162,6 +174,31 @@ public class ProviderHypothesisServiceImpl implements ProviderHypothesisService 
 		rpPercents.add(rpPercentMap.get(YearNameEnum.OPTIONAL_YEAR_1.getYearName()));
 		rpPercents.add(rpPercentMap.get(YearNameEnum.OPTIONAL_YEAR_2.getYearName()));
 		rpPercents.add(rpPercentMap.get(YearNameEnum.OPTIONAL_YEAR_3.getYearName()));
+	}
+
+	@Override
+	public List<ProviderHypothesis> findByDataAnalysisAndSubDataAnalysisAndYearLookupAndReportingOptionLookup(
+			String dataAnalysisName, String subDataAnalysisName, String year, String reportingOption) {
+		
+		DataAnalysis dataAnalysis = dataAnalaysisRepository.findByDataAnalysisName(dataAnalysisName);
+		SubDataAnalysis subDataAnalysis = subDataAnalysisRepository.findByDataAnalysisAndSubDataAnalysisName(dataAnalysis, subDataAnalysisName);
+		YearLookup yearLookup = yearLookUpRepository.findByYearName(year);
+		ReportingOptionLookup reportingOptionLookup = reportingOptionLookupRepository.findByReportingOptionName(reportingOption);
+		
+		return providerHypothesisRepository.findByDataAnalysisAndSubDataAnalysisAndYearLookupAndReportingOptionLookup(dataAnalysis, subDataAnalysis, yearLookup, reportingOptionLookup);
+	}
+
+
+	@Override
+	public List<ProviderHypothesis> findByDataAnalysisAndSubDataAnalysisAndParameterLookup(String dataAnalysisName,
+			String subDataAnalysisName, String parameterName) {
+		
+		DataAnalysis dataAnalysis = dataAnalaysisRepository.findByDataAnalysisName(dataAnalysisName);
+		SubDataAnalysis subDataAnalysis = subDataAnalysisRepository.findByDataAnalysisAndSubDataAnalysisName(dataAnalysis, subDataAnalysisName);
+		ParameterLookup parameterLookup = parameterLookUpRepository.findByParameterName(parameterName);
+		
+		return providerHypothesisRepository.findByDataAnalysisAndSubDataAnalysisAndParameterLookup(dataAnalysis, subDataAnalysis, parameterLookup);
+
 	}
 
 }

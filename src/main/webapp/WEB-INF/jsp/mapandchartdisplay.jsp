@@ -8,13 +8,12 @@
 	<title>INTERACTIVE MAPS</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-   
-    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">      
-    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
-    
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/Chart.bundle.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/utils.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/utils.js"></script> 
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/common.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ==" crossorigin=""/>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg==" crossorigin=""></script>
     
@@ -111,18 +110,19 @@
 
     <iframe id='mapIframe' hidden="true" frameborder="0" scrolling="no" width="100%" height="5000" ></iframe>
 
-    <div id="container" style="width: 75%;">
-        <canvas id="canvas"></canvas>
+	<div id ="messageDisplay"></div>
+	
+    <div id="chart-container" style="width: 75%;">
+        <canvas id="chart-canvas"></canvas>
     </div>
+   
     
-    <div id ="barChartDisplay"></div>
-    
-    <div id ="lineChartDisplay"></div>
     
 <script>
 	var btn = document.getElementById("displayreport");
 	var barChartData =null;
 	var lineChartData =null;
+	var serverContextPath = '${pageContext.request.contextPath}';
 	
 	btn.addEventListener("click", function(){
 		
@@ -133,10 +133,10 @@
 	    var parameterLookupSelectedVal = $("#parameterLookupId option:selected").text();
 	    
 	    if (reportTypeSelectedVal == "Bar Chart"){
-	    	var url = 'http://localhost:8080/barChart/year/'+yearLookUpSelectedVal+'/reportingOption/'+reportingOptionLookupSelectedVal;
+	    	var url = 'http://localhost:8080'+serverContextPath+'/barChart/dataanalysis/${dataanalysis}/subdataanalysis/${subdataanalysis}/year/'+yearLookUpSelectedVal+'/reportingOption/'+reportingOptionLookupSelectedVal;
 	    } 
 	    if (reportTypeSelectedVal == "Line Chart"){
-	    	var url = 'http://localhost:8080/lineChart/parameter/'+parameterLookupSelectedVal;
+	    	var url = 'http://localhost:8080'+serverContextPath+'/lineChart/dataanalysis/${dataanalysis}/subdataanalysis/${subdataanalysis}/parameter/'+parameterLookupSelectedVal;
 	    } 
 	    if (reportTypeSelectedVal == "Map"){
 	    	document.getElementById("mapIframe").hidden = false;
@@ -154,7 +154,7 @@
 	    	var yesNoId = document.getElementById("yesOrNoOptionId").value;
 	    	var yearId = document.getElementById("yearLookUpId").value;
 	    	var reportingOptionId = document.getElementById("reportingOptionLookupId").value;
-	    	var url = 'http://localhost:8080/maps/epOrGpro/'+ epGpro+'/ruralOrUrban/'+ ruralUrbanId +'/yesOrNoOption/'+ yesNoId +'/yearId/'+ yearId +'/reportingOptionId/'+ reportingOptionId;
+	    	var url = 'http://localhost:8080'+serverContextPath+'/maps/epOrGpro/'+ epGpro+'/ruralOrUrban/'+ ruralUrbanId +'/yesOrNoOption/'+ yesNoId +'/yearId/'+ yearId +'/reportingOptionId/'+ reportingOptionId;
  	        document.getElementById("mapIframe").src=url;
 	    } 
 		
@@ -207,7 +207,7 @@
   	    				        this.data.datasets.forEach(function(dataset, i) {
   	    				          var meta = chartInstance.controller.getDatasetMeta(i);
   	    				          meta.data.forEach(function(bar, index) { 
-	  	    				          console.log(bar._view.datasetLabel);
+	  	    				          //console.log(bar._view.datasetLabel);
 	  	    				          var data = yesCountValues[index];
  	  	    				          if(bar._view.datasetLabel == "NO"){
 	  	    				        	data = noCountValues[index];
@@ -235,7 +235,7 @@
 		                            display: true,
 		                            scaleLabel: {
 		                                display: true,
-		                                labelString: 'REPORTING OPTION'
+		                                labelString: 'PARAMETER'
 		                            },
 		    	                    ticks: {
 		    	                        display: true,
@@ -274,6 +274,7 @@
 		        //console.log(lineChartData);
 		        
 		        <!-- LINE CHART :: JAVA SCRIPT ###### START  -->
+		        var lineChartDataAvail = lineChartData.dataAvailable;
 		        var titletext = 'Base Year to Option Year 3 ' + 'Mental Health HPSA' + ' Percentage Summary'
 		    	var yaxeslabelstring = 'Percent of EPs & GPROs in ' +'Mental Health HPSA'
 		    
@@ -362,30 +363,35 @@
 	        }
 	        <!-- MAP ENDS -->
 	        
-            var ctx = document.getElementById("canvas").getContext("2d");
+	        <!-- Deleting the <canvas> element and then reappending a new <canvas> to the parent container: To Fix the Hover Over Issue   -->
+	        resetCanvas();
+	        
+	        
+	        var chartctx = document.getElementById("chart-canvas").getContext("2d");
             
             <!-- Different Chart Display :: START -->
     	    if (reportTypeSelectedVal == "Bar Chart"){
     	    	document.getElementById("mapIframe").hidden = true;
-    	    	document.getElementById("lineChartDisplay").innerHTML = "";
     	    	if (barChartDataAvail == "YES") {
-    	    		document.getElementById("barChartDisplay").innerHTML = new Chart(ctx, barconfig);
+    	    		document.getElementById('messageDisplay').style.display = 'none';
+    	    		var myBarChart = new Chart(chartctx, barconfig);
     	    	}
     	    	if (barChartDataAvail == "NO") {
-    	    		document.getElementById("barChartDisplay").innerHTML = "NO DATA AVAILABLE";
+    	    		document.getElementById("messageDisplay").innerHTML = "No Data Available For The Selected Options!";
     	    	}
-    	    	
     	    } 
     	    if (reportTypeSelectedVal == "Line Chart"){
-    	    	document.getElementById("barChartDisplay").innerHTML = "";
     	    	document.getElementById("mapIframe").hidden = true;
-    	    	document.getElementById("lineChartDisplay").innerHTML = new Chart(ctx, lineconfig);
-    	    	document.getElementById("barChartDisplay").innerHTML = "";
-    	    	barChartDisplay.clear();
+    	    	if (lineChartDataAvail == "YES") {
+    	    		document.getElementById('messageDisplay').style.display = 'none';
+    	    		var myLineChart = new Chart(chartctx, lineconfig);
+    	    	}
+    	    	if (lineChartDataAvail == "NO") {
+    	    		document.getElementById("messageDisplay").innerHTML = "No Data Available For The Selected Options!";
+    	    	}
     	    } 
     	    if (reportTypeSelectedVal == "Map"){
     	    	<!-- TODO for Map-->
-    	    	
     	    } 
             <!-- Different Chart Display :: END -->
 	        
@@ -396,8 +402,10 @@
 	});
 	
 	
-	function renderHTML(data) {
-	};
+ 	var resetCanvas = function(){
+		$('#chart-canvas').remove(); // this is my <canvas> element
+		$('#chart-container').append('<canvas id="chart-canvas"><canvas>');
+	};  
 	
 	document.getElementById("reportTypeId").onchange = function() {
 		 var x = document.getElementById("reportTypeId").value;

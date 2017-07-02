@@ -33,4 +33,8 @@ public interface ProviderHypothesisService {
 	
 	boolean setRPPercentValue(List<ProviderHypothesis> providerHypothesisList, List<Double> claimsPercents, List<Double> ehrPercents, List<Double> registryPercents, List<Double> gprowiPercents, List<Double> qcdrPercents);
 
+	List<ProviderHypothesis> findByDataAnalysisAndSubDataAnalysisAndYearLookupAndReportingOptionLookup(String dataAnalysis, String subDataAnalysis, String year, String reportingOption);
+	
+	List<ProviderHypothesis> findByDataAnalysisAndSubDataAnalysisAndParameterLookup(String dataAnalysis, String subDataAnalysis, String parameterName);
+	
 }

@@ -42,9 +42,11 @@ public class MapAndChartDisplayController {
 	@Autowired
 	private ReportingOptionLookUpService reportingOptionLookUpService;
 	
-	@RequestMapping("/mapandchartdisplay/hypothesis/{hypothesis}")
-	public String displayMapAndChartScreen(@PathVariable("hypothesis") String hypothesis, HttpServletRequest request, Principal currentUser, Model model ) {
-		model.addAttribute("hypothesis", hypothesis);
+	@RequestMapping("/mapandchartdisplay/dataanalysis/{dataanalysis}/subdataanalysis/{subdataanalysis}")
+	public String mapAndChartScreen(@PathVariable("dataanalysis") String dataanalysis, @PathVariable("subdataanalysis") String subdataanalysis, HttpServletRequest request, Principal currentUser, Model model ) {
+		
+		model.addAttribute("dataanalysis", dataanalysis);
+		model.addAttribute("subdataanalysis", subdataanalysis);
 		
 		final List<YearLookup> yearLookups = yearLookUpService.findAll();			
 		model.addAttribute("yearLookups", yearLookups);
@@ -65,5 +67,5 @@ public class MapAndChartDisplayController {
 		return "mapandchartdisplay";
 		
 	}
-	
+		
 }

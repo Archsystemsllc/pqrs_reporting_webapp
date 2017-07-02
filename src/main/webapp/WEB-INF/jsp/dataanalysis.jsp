@@ -8,13 +8,10 @@
 	<title>Hypothesis</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-    <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">      
-    <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">      
+    <link href="${pageContext.request.contextPath}/resources/css/common.css" rel="stylesheet">
     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.15/js/dataTables.jqueryui.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.15/css/dataTables.jqueryui.min.css"></script>
 	
 </head> 
 
@@ -41,7 +38,7 @@
 			<c:forEach items="${dataAnalysisList}" var="dataAnalysis">
 				<tr>
 					<td>
-					<a href="/mapandchartdisplay/hypothesis/hypo1">${dataAnalysis.dataAnalysisName}</a>
+					<a href="${pageContext.request.contextPath}/mapandchartdisplay/dataanalysis/${dataAnalysis.dataAnalysisName}/subdataanalysis/ALL">${dataAnalysis.dataAnalysisName}</a>
 					</td>
 					
 					<td> ${dataAnalysis.dataAnalysisDescription}
@@ -57,9 +54,12 @@
 				</tr>
 				
 				<c:forEach items="${dataAnalysis.subDataAnalysis}" var="subDataAnalysis">
+				
+				<c:if test="${subDataAnalysis.subDataAnalysisName ne 'Not Applicable'}">
+				
 					<tr>
 						<td>
-						<ul> <li> <a href="/mapandchartdisplay/hypothesis/hypo1">${subDataAnalysis.subDataAnalysisName}</a> </li> </ul>
+						<ul> <li> <a href="${pageContext.request.contextPath}/mapandchartdisplay/dataanalysis/${dataAnalysis.dataAnalysisName}/subdataanalysis/${subDataAnalysis.subDataAnalysisName}">${subDataAnalysis.subDataAnalysisName}</a> </li> </ul>
 						</td>
 						
 						<td> ${subDataAnalysis.subDataAnalysisDescription}
@@ -73,6 +73,8 @@
 						</td>
 				
 					</tr>
+					
+					</c:if>
 				
 				</c:forEach>
 				

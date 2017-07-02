@@ -18,9 +18,7 @@ public interface SubDataAnalysisRepository extends JpaRepository<SubDataAnalysis
 
 	List<SubDataAnalysis> findByDataAnalysis(DataAnalysis dataAnalysis);
 	SubDataAnalysis findById(final int id);
-	
 	SubDataAnalysis findBySubDataAnalysisName(String subDataAnalysisName);
 	
-	SubDataAnalysis findByDataAnalysisAndSubDataAnalysisName(DataAnalysis dataAnalysis, String subDataAnalysisName);
-	
+	SubDataAnalysis findByDataAnalysisAndSubDataAnalysisName(DataAnalysis dataAnalysis, String subDataAnalysisName);		
 }

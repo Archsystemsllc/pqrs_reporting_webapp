@@ -8,12 +8,15 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.archsystemsinc.pqrs.ReferenceDataLoader;
+import com.archsystemsinc.pqrs.service.DataAnalysisService;
+import com.archsystemsinc.pqrs.service.SubDataAnalysisService;
 
 /**
  * 
@@ -26,6 +29,8 @@ import com.archsystemsinc.pqrs.ReferenceDataLoader;
 @Controller
 public class WebAppController {
 	
+
+	
 	/**
 	 * 
 	 * @param epOrGpro
@@ -36,12 +41,14 @@ public class WebAppController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping("/maps/epOrGpro/{epOrGpro}/ruralOrUrban/{ruralOrUrban}/yesOrNoOption/{yesOrNoOption}/yearId/{yearId}/reportingOptionId/{reportingOptionId}")
+	@RequestMapping("/maps/epOrGpro/{epOrGpro}/ruralOrUrban/{ruralOrUrban}/yesOrNoOption/{yesOrNoOption}/yearId/{yearId}/reportingOptionId/{reportingOptionId}/dataAnalysis/{dataAnalysis}/subDataAnalysis/{subDataAnalysis}")
     public String states(@PathVariable("epOrGpro") Integer epOrGpro, 
     					 @PathVariable("ruralOrUrban") Integer ruralOrUrban, 
     					 @PathVariable("yesOrNoOption") Integer yesOrNoOption, 
     					 @PathVariable("yearId") Integer yearId,
-    					 @PathVariable("reportingOptionId") Integer reportingOptionId, Model model, HttpServletResponse response) {
+    					 @PathVariable("reportingOptionId") Integer reportingOptionId, 
+    					 @PathVariable("dataAnalysis") String dataAnalysisName, 
+    					 @PathVariable("subDataAnalysis") String subDataAnalysisName, Model model, HttpServletResponse response) {
 		response.setHeader("X-Frame-Options" ,"SAMEORIGIN");
 		String hoverTitle = "<h4>US State Map</h4>";
 		String attribute = ReferenceDataLoader.referenceData.get("reportingOptions").get(reportingOptionId);
@@ -58,6 +65,9 @@ public class WebAppController {
 		mmap.put(1000, "'#FEB24C'");
 		mmap.put(500,  "'#FED976'");
 		mmap.put(0,	 "'#FFEDA0'");
+		
+		model.addAttribute("dataAnalysis", dataAnalysisName);
+		model.addAttribute("subDataAnalysis", subDataAnalysisName);
 		
 		model.addAttribute("yearId", yearId);
 		model.addAttribute("reportingOptionId", reportingOptionId);

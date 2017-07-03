@@ -45,6 +45,16 @@ public class StatewiseStatistic implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="year_id")
 	private YearLookup yearLookup;
+	
+	//bi-directional many-to-one association to DataAnalysis
+	@ManyToOne
+	@JoinColumn(name="data_analysis_id")
+	private DataAnalysis dataAnalysis;
+	
+	//bi-directional many-to-one association to SubDataAnalysis
+	@ManyToOne
+	@JoinColumn(name="sub_data_analysis_id")
+	private SubDataAnalysis subDataAnalysis;
 
 	public StatewiseStatistic() {
 	}
@@ -113,4 +123,20 @@ public class StatewiseStatistic implements Serializable {
 		this.yearLookup = yearLookup;
 	}
 
+	public DataAnalysis getDataAnalysis() {
+		return dataAnalysis;
+	}
+
+	public void setDataAnalysis(DataAnalysis dataAnalysis) {
+		this.dataAnalysis = dataAnalysis;
+	}
+
+	public SubDataAnalysis getSubDataAnalysis() {
+		return subDataAnalysis;
+	}
+
+	public void setSubDataAnalysis(SubDataAnalysis subDataAnalysis) {
+		this.subDataAnalysis = subDataAnalysis;
+	}
+	
 }

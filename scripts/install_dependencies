@@ -6,4 +6,4 @@ set -e
 cat > /etc/init.d/pqrs-reporting-webapp <<'EOF'
 
 # Change permission mode for the service script
-chmod 755 /etc/init.d/pqrs-reporting-webapp
+# chmod 755 /etc/init.d/pqrs-reporting-webapp

@@ -2,4 +2,4 @@
 
 set -e
 
-service pqrs-reporting-webapp start
+service pqrs_reporting_webapp start

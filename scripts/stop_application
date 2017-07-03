@@ -2,6 +2,6 @@
 
 set -e
 
-sudo chmod +x /etc/init.d/pqrs-reporting-webapp
+#sudo chmod +x /etc/init.d/pqrs-reporting-webapp
 
-sudo service pqrs-reporting-webapp stop
+sudo service pqrs_reporting_webapp stop

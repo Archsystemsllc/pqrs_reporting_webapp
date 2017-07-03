@@ -13,7 +13,7 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
-apply plugin: 'war'
+apply plugin: 'jar'
 apply plugin: 'eclipse-wtp'
 
 repositories {
@@ -50,9 +50,7 @@ dependencies {
 	compile group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: '9.0.0.M21'
 	compile group: 'javax.servlet', name: 'jstl', version: '1.2'
 	compile group: 'org.codehaus.jackson', name: 'jackson-mapper-asl', version: '1.9.13'
-        providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    
 }
 
-configurations {
-    providedRuntime
-}
+

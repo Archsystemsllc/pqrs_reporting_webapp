@@ -13,7 +13,7 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
-apply plugin: 'jar'
+
 apply plugin: 'eclipse-wtp'
 
 repositories {
